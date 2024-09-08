@@ -19,13 +19,13 @@ public class RunTest {
     @Test
     public void test1() {
         System.out.println("1");
-        Assertions.assertEquals("CocoJumbo", "CocoJumbo");
+        Assertions.assertEquals("CocoJumbo", "CocoJumbo", "Актуальное значение отличается от ожидаемого");
     }
 
     @Test
     public void test2() {
         System.out.println("2");
-        Assertions.assertEquals("CocoJumbo", "CoconutCrispies");
+        Assertions.assertEquals("CocoJumbo", "CoconutCrispies", "Актуальное значение отличается от ожидаемого");
     }
 
 }
