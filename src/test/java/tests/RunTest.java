@@ -2,16 +2,22 @@ package tests;
 
 
 import config.WebHooks;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import pages.LoginPage;
 import pages.ProjectPage;
 
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
+
 public class RunTest extends WebHooks {
+
+    @AfterEach
+    public void tearDown() {
+        closeWebDriver();
+    }
 
 
     private final LoginPage loginPage = new LoginPage();
@@ -28,6 +34,7 @@ public class RunTest extends WebHooks {
     }
 
     @Test
+    @Order(1)
     @DisplayName("Логин тест")
     public void testSuccessfulLogin() {
         loginUser();
@@ -35,6 +42,7 @@ public class RunTest extends WebHooks {
     }
 
     @Test
+    @Order(2)
     @DisplayName("Переход в проект 'Test'")
     public void testProjectsPageOpen() {
         loginUser();
@@ -43,7 +51,9 @@ public class RunTest extends WebHooks {
 
     }
 
+
     @Test
+    @Order(3)
     @DisplayName("Получение количества созданных задач и проверка увеличения их числа при добавлении новой")
     public void testTaskCountIncrease() {
         loginUser();
@@ -54,6 +64,7 @@ public class RunTest extends WebHooks {
     }
 
     @Test
+    @Order(4)
     @DisplayName("Проверка параметров задачи")
     public void testVerifyTaskParams() {
         loginUser();
