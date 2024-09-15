@@ -6,7 +6,9 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.PageLoadStrategy;
 
-
+/**
+ * Класс для настройки браузера перед выполнением тестов.
+ */
 public class WebHooks {
 
 
@@ -14,8 +16,10 @@ public class WebHooks {
     public void initBrowser() {
         Selenide.open("https://edujira.ifellow.ru/");
         WebDriverRunner.getWebDriver().manage().window().maximize();
-        Configuration.pageLoadStrategy = PageLoadStrategy.NORMAL.toString();
         System.out.println((Configuration.pageLoadStrategy));
+        Configuration.pageLoadStrategy = PageLoadStrategy.NORMAL.toString();
+        Configuration.timeout = 5000;
+        Selenide.refresh();
     }
 
 }
