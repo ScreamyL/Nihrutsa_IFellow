@@ -10,8 +10,7 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RunTest extends WebHooks {
 
     @AfterEach
@@ -19,47 +18,33 @@ public class RunTest extends WebHooks {
         closeWebDriver();
     }
 
-
     private final LoginPage loginPage = new LoginPage();
     private final ProjectPage openProjectsPage = new ProjectPage();
-
-    private void loginUser() {
-        loginPage.login("AT3", "Qwerty123");
-        assertTrue(loginPage.isLoggedIn(), "Пользователь не вошел в систему");
-    }
-
-    private void openProjectsPage() {
-        openProjectsPage.OpenProjectPage();
-        assertTrue(openProjectsPage.isOpenProjectTestPage(), "Не удалось открыть страницу 'Тесты'");
-    }
 
     @Test
     @Order(1)
     @DisplayName("Логин тест")
-    public void testSuccessfulLogin() {
-        loginUser();
-
+    public void testLogin() {
+        loginPage.login("AT3", "Qwerty123");
+        assertTrue(loginPage.isLoggedIn(), "Пользователь не вошел в систему");
     }
 
     @Test
     @Order(2)
     @DisplayName("Переход в проект 'Test'")
     public void testProjectsPageOpen() {
-        loginUser();
-        openProjectsPage();
-
-
+        testLogin();
+        openProjectsPage.OpenProjectPage();
+        assertTrue(openProjectsPage.isOpenProjectTestPage(), "Не удалось открыть страницу 'Тесты'");
     }
-
 
     @Test
     @Order(3)
     @DisplayName("Получение количества созданных задач и проверка увеличения их числа при добавлении новой")
     public void testTaskCountIncrease() {
-        loginUser();
-        openProjectsPage();
+        testProjectsPageOpen();
         int initialCount = openProjectsPage.getTaskCount();
-        openProjectsPage.createTask("Тестовая задача");
+        openProjectsPage.createTaskAndCount("Тестовая задача");
         assertTrue(openProjectsPage.isTaskCountIncreased(initialCount), "Количество задач не увеличилось на 1");
     }
 
@@ -67,7 +52,7 @@ public class RunTest extends WebHooks {
     @Order(4)
     @DisplayName("Проверка параметров задачи")
     public void testVerifyTaskParams() {
-        loginUser();
+        testLogin();
         String[] taskDetails = openProjectsPage.getTaskDetails("TestSeleniumATHomework");
         String status = taskDetails[0];
         String version = taskDetails[1];
@@ -76,5 +61,12 @@ public class RunTest extends WebHooks {
         System.out.println("Параметры задачи успешно проверены: статус - " + status + ", версия - " + version);
     }
 
+    @Test
+    @Order(5)
+    @DisplayName("Создание бага и проводка по статусам")
+    public void createBugAndStatusChanges() {
+        testLogin();
+        openProjectsPage.transitionThroughStatuses("Тестовая задача");
+    }
 
 }

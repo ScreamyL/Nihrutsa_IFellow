@@ -31,6 +31,7 @@ public class LoginPage {
     }
 
     public boolean isLoggedIn() {
+        userProfile.shouldBe(Condition.visible, Duration.ofSeconds(10));
         return userProfile.isDisplayed();
     }
 
