@@ -13,19 +13,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RunTest extends WebHooks {
 
+    private final LoginPage loginPage = new LoginPage();
+    private final ProjectPage projectPage = new ProjectPage();
+
+    @BeforeEach
+    public void setUp() {
+        loginPage.login("AT3", "Qwerty123");
+    }
+
     @AfterEach
     public void tearDown() {
         closeWebDriver();
     }
 
-    private final LoginPage loginPage = new LoginPage();
-    private final ProjectPage openProjectsPage = new ProjectPage();
-
     @Test
     @Order(1)
     @DisplayName("Логин тест")
     public void testLogin() {
-        loginPage.login("AT3", "Qwerty123");
         assertTrue(loginPage.isLoggedIn(), "Пользователь не вошел в систему");
     }
 
@@ -33,9 +37,8 @@ public class RunTest extends WebHooks {
     @Order(2)
     @DisplayName("Переход в проект 'Test'")
     public void testProjectsPageOpen() {
-        testLogin();
-        openProjectsPage.OpenProjectPage();
-        assertTrue(openProjectsPage.isOpenProjectTestPage(), "Не удалось открыть страницу 'Тесты'");
+        projectPage.openProjectPage();
+        assertTrue(projectPage.isOpenProjectTestPage(), "Не удалось открыть страницу 'Тесты'");
     }
 
     @Test
@@ -43,30 +46,27 @@ public class RunTest extends WebHooks {
     @DisplayName("Получение количества созданных задач и проверка увеличения их числа при добавлении новой")
     public void testTaskCountIncrease() {
         testProjectsPageOpen();
-        int initialCount = openProjectsPage.getTaskCount();
-        openProjectsPage.createTaskAndCount("Тестовая задача");
-        assertTrue(openProjectsPage.isTaskCountIncreased(initialCount), "Количество задач не увеличилось на 1");
+        int initialCount = projectPage.getTaskCount();
+        projectPage.createTaskAndCount("Тестовая задача");
+        assertTrue(projectPage.isTaskCountIncreased(initialCount), "Количество задач не увеличилось на 1");
     }
 
     @Test
     @Order(4)
     @DisplayName("Проверка параметров задачи")
     public void testVerifyTaskParams() {
-        testLogin();
-        String[] taskDetails = openProjectsPage.getTaskDetails("TestSeleniumATHomework");
-        String status = taskDetails[0];
-        String version = taskDetails[1];
-        assertEquals("СДЕЛАТЬ", status, "Ожидался статус: 'СДЕЛАТЬ', но найден: " + status);
-        assertEquals("Version 2.0", version, "Ожидалась версия: 'Version 2.0', но найдена: " + version);
-        System.out.println("Параметры задачи успешно проверены: статус - " + status + ", версия - " + version);
+        String[] taskDetails = projectPage.getTaskDetails("TestSeleniumATHomework");
+        assertEquals("СДЕЛАТЬ", taskDetails[0], "Ожидался статус: 'СДЕЛАТЬ', но найден: " + taskDetails[0]);
+        assertEquals("Version 2.0", taskDetails[1], "Ожидалась версия: 'Version 2.0', но найдена: " + taskDetails[1]);
+
+        System.out.println("Параметры задачи успешно проверены: статус - " + taskDetails[0] + ", версия - " + taskDetails[1]);
     }
 
     @Test
     @Order(5)
     @DisplayName("Создание бага и проводка по статусам")
     public void createBugAndStatusChanges() {
-        testLogin();
-        openProjectsPage.transitionThroughStatuses("Тестовая задача");
+        projectPage.transitionThroughStatuses("Тестовая задача");
     }
 
 }

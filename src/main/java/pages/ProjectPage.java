@@ -25,7 +25,7 @@ public class ProjectPage {
     private final SelenideElement successMessage = $(By.xpath("//div[@class= 'aui-message closeable aui-message-success aui-will-close']/a[@class= 'issue-created-key issue-link']"));
 
 
-    public void OpenProjectPage() {
+    public void openProjectPage() {
         ProjectsButton.click();
         TestsButton.click();
     }
