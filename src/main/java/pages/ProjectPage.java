@@ -20,6 +20,8 @@ public class ProjectPage {
     private final SelenideElement createTaskButton = $(By.xpath("//a[@id= 'create_link']"));
     private final SelenideElement issueType = $(By.xpath("//input[@id= 'issuetype-field']"));
     private final SelenideElement taskTitleInput = $(By.xpath("//input[@class= 'text long-field']"));
+    private final SelenideElement toTextButton = $(By.xpath("//label[text()='Описание']/following-sibling::div//li[@data-mode='source']/button[text()='Текст']"));
+    private final SelenideElement description = $(By.xpath("//label[text()='Описание']/following-sibling::div//textarea[@id='description']"));
     private final SelenideElement submitTaskButton = $(By.xpath("//input[@value= 'Создать']"));
     private final SelenideElement searchInput = $(By.xpath("//input[@id= 'quickSearchInput']"));
     private final SelenideElement successMessage = $(By.xpath("//div[@class= 'aui-message closeable aui-message-success aui-will-close']/a[@class= 'issue-created-key issue-link']"));
@@ -47,6 +49,8 @@ public class ProjectPage {
         issueType.shouldBe(Condition.visible, Duration.ofSeconds(5));
         issueType.setValue("Ошибка");
         taskTitleInput.setValue(title);
+        toTextButton.click();
+        description.setValue("Временный баг для проверки ДЗ");
         submitTaskButton.click();
 
 
