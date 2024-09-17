@@ -7,52 +7,49 @@ import io.qameta.allure.Step;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Класс для представления страницы проекта "Test".
- * Предоставляет собой методы для взаимодействия с элементами страницы проекта,
- * такими как создание задач, изменение их статусов и получение информации о проекте.
+ * Класс PageObject для страницы проекта "Test"
  */
 public class ProjectPage {
 
-    private final SelenideElement ProjectsButton = $($x("//a[text()='Проекты']"));
-    private final SelenideElement TestsButton = $($x("//a[text()='Test (TEST)']"));
-    private final SelenideElement PageTitle = $($x("//span[@id= 'issues-subnavigation-title']"));
-    private final SelenideElement taskCount = $($x("//div[@class= 'showing']"));
-    private final SelenideElement createTaskButton = $($x("//a[@id= 'create_link']"));
-    private final SelenideElement issueType = $($x("//input[@id= 'issuetype-field']"));
-    private final SelenideElement taskTitleInput = $($x("//input[@class= 'text long-field']"));
-    private final SelenideElement toTextButton = $($x("//label[text()='Описание']/following-sibling::div//li[@data-mode='source']/button[text()='Текст']"));
-    private final SelenideElement description = $($x("//label[text()='Описание']/following-sibling::div//textarea[@id='description']"));
-    private final SelenideElement submitTaskButton = $($x("//input[@value= 'Создать']"));
-    private final SelenideElement searchInput = $($x("//input[@id= 'quickSearchInput']"));
-    private final SelenideElement successMessage = $($x("//div[@class= 'aui-message closeable aui-message-success aui-will-close']/a[@class= 'issue-created-key issue-link']"));
+    private final SelenideElement projectsButton = $x("//a[text()='Проекты']").as("Кнопка 'Проекты'");
+    private final SelenideElement testsButton = $x("//a[text()='Test (TEST)']").as("Кнопка проекта 'Test'");
+    private final SelenideElement pageTitle = $x("//span[@id= 'issues-subnavigation-title']").as("Оглавление страницы");
+    private final SelenideElement taskCount = $x("//div[@class= 'showing']").as("Количество задач");
+    private final SelenideElement createTaskButton = $x("//a[@id= 'create_link']").as("Кнопка создания новой задачи");
+    private final SelenideElement issueType = $x("//input[@id= 'issuetype-field']").as("Поле ввода типа задачи");
+    private final SelenideElement taskStatus = $x("//span[@id= 'status-val']").as("Статус задачи");
+    private final SelenideElement taskVersion = $x("//span[@id='fixfor-val']").as("Версия задачи");
+    private final SelenideElement taskTitleInput = $x("//input[@class= 'text long-field']").as("Поле ввода названия задачи");
+    private final SelenideElement toTextButton = $x("//label[text()='Описание']/following-sibling::div//li[@data-mode='source']/button[text()='Текст']").as("Кнопка переключения в режим 'Текст'");
+    private final SelenideElement description = $x("//label[text()='Описание']/following-sibling::div//textarea[@id='description']").as("Поле ввода описания задачи");
+    private final SelenideElement submitTaskButton = $x("//input[@value= 'Создать']").as("Кнопка подтверждения создания задачи");
+    private final SelenideElement searchInput = $x("//input[@id= 'quickSearchInput']").as("Поле ввода поиска");
+    private final SelenideElement successMessage = $x("//div[@class= 'aui-message closeable aui-message-success aui-will-close']/a[@class= 'issue-created-key issue-link']").as("Сообщение об успешно созданной задаче");
 
     @Step("Открытие страницы проекта")
     public void openProjectPage() {
-        ProjectsButton.click();
-        TestsButton.click();
+        projectsButton.click();
+        testsButton.click();
+        assertTrue(pageTitle.shouldBe(Condition.visible).isDisplayed(), "Не удалось открыть страницу 'Тесты'");
     }
 
-    @Step("Проверка, открыта ли страница проекта 'Test'")
-    public boolean isOpenProjectTestPage() {
-        return PageTitle.shouldBe(Condition.visible).isDisplayed();
-    }
 
     @Step("Получение текущего количества задач")
     public int getTaskCount() {
         String countText = taskCount.getText();
-        String[] parts = countText.split(" ");
-        return Integer.parseInt(parts[2]);
+        return Integer.parseInt(countText.split("из ")[1]);
 
     }
 
     public void createTask(String title) {
-        createTaskButton.shouldBe(Condition.visible, Duration.ofSeconds(5));
-        createTaskButton.click();
-        issueType.shouldBe(Condition.visible, Duration.ofSeconds(5));
-        issueType.setValue("Ошибка");
+        createTaskButton.shouldBe(Condition.visible, Duration.ofSeconds(5)).click();
+        issueType.shouldBe(Condition.visible, Duration.ofSeconds(5)).setValue("Ошибка");
         taskTitleInput.setValue(title);
         toTextButton.click();
         description.setValue("Временный баг для проверки ДЗ");
@@ -62,62 +59,62 @@ public class ProjectPage {
     }
 
     @Step("Создание задачи и обновление количества задач")
-    public void createTaskAndCount(String title) {
+    public void createTaskAndCount(String title, int initialCount) {
         createTask(title);
         successMessage.shouldBe(Condition.visible, Duration.ofSeconds(5));
         Selenide.refresh();
         int updatedCount = getTaskCount();
+        assertEquals(updatedCount, initialCount + 1, "Количество задач не увеличилось на 1");
         System.out.println("Общее количество задач после добавления новой: " + updatedCount);
     }
 
-    @Step("Проверка, увеличилось ли количество задач на 1")
-    public boolean isTaskCountIncreased(int previousCount) {
-        return getTaskCount() == previousCount + 1;
-    }
 
-    public String getCurrentStatus() {
-        return $($x("//span[@id= 'status-val']")).getText();
+    public boolean getCurrentStatus(String expected) {
+        return taskStatus.getText().equals(expected);
     }
 
     @Step("Получение деталей задачи с именем {taskName}")
     public String[] getTaskDetails(String taskName) {
 
         searchInput.setValue(taskName).pressEnter();
-        String status = $($x("//span[@id= 'status-val']")).getText();
-        String version = $($x("//span[@id='fixfor-val']")).getText();
+        assertTrue(taskStatus.shouldBe(Condition.visible).isDisplayed(), "Не удалось найти параметр 'Статус'");
+        assertTrue(taskVersion.shouldBe(Condition.visible).isDisplayed(), "Не удалось найти параметр 'Версия'");
+        String status = taskStatus.getText();
+        String version = taskVersion.getText();
+        System.out.println("Параметры задачи успешно проверены: статус - " + status + ", версия - " + version);
         return new String[]{status, version};
 
     }
 
     public void transitionToTodo() {
-        $($x("//span[contains(text(), 'Нужно сделать')]")).click();
+        $x("//span[contains(text(), 'Нужно сделать')]").click();
         Selenide.sleep(1000);
-        assert getCurrentStatus().equals("СДЕЛАТЬ") : "Статус не изменился на 'Cделать'";
-        System.out.println("Статус: 'Cделать'");
+        assert getCurrentStatus("СДЕЛАТЬ") : "Статус не изменился на 'Cделать'";
+        getCurrentStatus("СДЕЛАТЬ");
     }
 
     public void transitionToInProgress() {
-        $($x("//span[contains(text(), 'В работе')]")).click();
+        $x("//span[contains(text(), 'В работе')]").click();
         Selenide.sleep(1000);
-        assert getCurrentStatus().equals("В РАБОТЕ") : "Статус не изменился на 'В работе'";
-        System.out.println("Статус: 'В работе'");
+        assert getCurrentStatus("В РАБОТЕ") : "Статус не изменился на 'В работе'";
+        getCurrentStatus("В РАБОТЕ");
     }
 
     public void transitionToDone() {
-        $($x("//a[@id='opsbar-transitions_more']")).click();
-        $($x("//span[contains(text(), 'Исполнено')]")).click();
-        $($x("//input[@id='issue-workflow-transition-submit']")).click();
+        $x("//a[@id='opsbar-transitions_more']").click();
+        $x("//span[contains(text(), 'Исполнено')]").click();
+        $x("//input[@id='issue-workflow-transition-submit']").click();
         Selenide.sleep(1000);
-        assert getCurrentStatus().equals("РЕШЕННЫЕ") : "Статус не изменился на 'Решенные'";
-        System.out.println("Статус: 'Решенные'");
+        assert getCurrentStatus("РЕШЕННЫЕ") : "Статус не изменился на 'Решенные'";
+        getCurrentStatus("РЕШЕННЫЕ");
     }
 
     public void transitionToCompleted() {
-        $($x("//a[@id='opsbar-transitions_more']")).click();
-        $($x("//span[contains(text(), 'Выполнено')]")).click();
+        $x("//a[@id='opsbar-transitions_more']").click();
+        $x("//span[contains(text(), 'Выполнено')]").click();
         Selenide.sleep(1000);
-        assert getCurrentStatus().equals("ГОТОВО") : "Статус не изменился на 'Готово'";
-        System.out.println("Статус: 'Готово'");
+        assert getCurrentStatus("ГОТОВО") : "Статус не изменился на 'Готово'";
+        getCurrentStatus("ГОТОВО");
     }
 
     @Step("Прохождение всех статусов для задачи с заголовком {title}")
