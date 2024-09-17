@@ -7,6 +7,7 @@ import pages.LoginPage;
 import pages.ProjectPage;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+//Очерёдность добавлена больше для 'Красоты' выполнения тестов, без неё всё тоже будет отлично работать.
 public class RunTest extends WebHooks {
 
     private final LoginPage loginPage = new LoginPage();
@@ -19,6 +20,7 @@ public class RunTest extends WebHooks {
 
 
     @Test
+    //Тест ради теста именно с помощью ассерта, по сути залогинивание и так проверяется в методе логина путём видимых ожиданий.
     @Order(1)
     @DisplayName("Логин тест")
     public void testLogin() {

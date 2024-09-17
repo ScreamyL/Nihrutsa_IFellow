@@ -70,7 +70,8 @@ public class ProjectPage {
 
 
     public boolean getCurrentStatus(String expected) {
-        return taskStatus.getText().equals(expected);
+        assertEquals(expected, taskStatus.getText(), "Статус задачи не соответствует ожидаемому " + expected);
+        return true;
     }
 
     @Step("Получение деталей задачи с именем {taskName}")
@@ -89,14 +90,12 @@ public class ProjectPage {
     public void transitionToTodo() {
         $x("//span[contains(text(), 'Нужно сделать')]").click();
         Selenide.sleep(1000);
-        assert getCurrentStatus("СДЕЛАТЬ") : "Статус не изменился на 'Cделать'";
         getCurrentStatus("СДЕЛАТЬ");
     }
 
     public void transitionToInProgress() {
         $x("//span[contains(text(), 'В работе')]").click();
         Selenide.sleep(1000);
-        assert getCurrentStatus("В РАБОТЕ") : "Статус не изменился на 'В работе'";
         getCurrentStatus("В РАБОТЕ");
     }
 
@@ -105,7 +104,6 @@ public class ProjectPage {
         $x("//span[contains(text(), 'Исполнено')]").click();
         $x("//input[@id='issue-workflow-transition-submit']").click();
         Selenide.sleep(1000);
-        assert getCurrentStatus("РЕШЕННЫЕ") : "Статус не изменился на 'Решенные'";
         getCurrentStatus("РЕШЕННЫЕ");
     }
 
@@ -113,7 +111,6 @@ public class ProjectPage {
         $x("//a[@id='opsbar-transitions_more']").click();
         $x("//span[contains(text(), 'Выполнено')]").click();
         Selenide.sleep(1000);
-        assert getCurrentStatus("ГОТОВО") : "Статус не изменился на 'Готово'";
         getCurrentStatus("ГОТОВО");
     }
 
