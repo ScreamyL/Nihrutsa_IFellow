@@ -82,6 +82,8 @@ public class ProjectPage {
         assertTrue(taskVersion.shouldBe(Condition.visible).isDisplayed(), "Не удалось найти параметр 'Версия'");
         String status = taskStatus.getText();
         String version = taskVersion.getText();
+        assertEquals("СДЕЛАТЬ", status, "Ожидался статус: 'СДЕЛАТЬ', но найден: " + status);
+        assertEquals("Version 2.0", version, "Ожидалась версия: 'Version 2.0', но найдена: " + version);
         System.out.println("Параметры задачи успешно проверены: статус - " + status + ", версия - " + version);
         return new String[]{status, version};
 
