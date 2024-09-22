@@ -21,8 +21,7 @@ public class WebHooks {
         WebDriverRunner.getWebDriver().manage().window().maximize();
         System.out.println((Configuration.pageLoadStrategy));
         Configuration.pageLoadStrategy = PageLoadStrategy.NORMAL.toString();
-        Configuration.timeout = 5000;
-        Selenide.refresh();
+        Configuration.timeout = 15000;
     }
 
     @AfterEach

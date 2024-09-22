@@ -3,6 +3,7 @@ package tests;
 
 import config.WebHooks;
 import org.junit.jupiter.api.*;
+import pages.BugPage;
 import pages.LoginPage;
 import pages.ProjectPage;
 
@@ -12,7 +13,7 @@ public class RunTest extends WebHooks {
 
     private final LoginPage loginPage = new LoginPage();
     private final ProjectPage projectPage = new ProjectPage();
-
+    private final BugPage bugPage = new BugPage();
     @BeforeEach
     public void setUp() {
         loginPage.login("AT3", "Qwerty123");
@@ -54,7 +55,7 @@ public class RunTest extends WebHooks {
     @Order(5)
     @DisplayName("Создание бага и проводка по статусам")
     public void createBugAndStatusChanges() {
-        projectPage.transitionThroughStatuses("Тестовая задача");
+        bugPage.transitionThroughStatuses("Тестовая задача");
     }
 
 }

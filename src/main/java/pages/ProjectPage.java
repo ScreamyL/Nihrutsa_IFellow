@@ -8,7 +8,6 @@ import io.qameta.allure.Step;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,7 +35,7 @@ public class ProjectPage {
     public void openProjectPage() {
         projectsButton.click();
         testsButton.click();
-        assertTrue(pageTitle.shouldBe(Condition.visible).isDisplayed(), "Не удалось открыть страницу 'Тесты'");
+        assertTrue(pageTitle.isDisplayed(), "Не удалось открыть страницу 'Тесты'");
     }
 
 
@@ -69,17 +68,12 @@ public class ProjectPage {
     }
 
 
-    public boolean getCurrentStatus(String expected) {
-        assertEquals(expected, taskStatus.getText(), "Статус задачи не соответствует ожидаемому " + expected);
-        return true;
-    }
-
     @Step("Получение деталей задачи с именем {taskName}")
     public String[] getTaskDetails(String taskName) {
 
         searchInput.setValue(taskName).pressEnter();
-        assertTrue(taskStatus.shouldBe(Condition.visible).isDisplayed(), "Не удалось найти параметр 'Статус'");
-        assertTrue(taskVersion.shouldBe(Condition.visible).isDisplayed(), "Не удалось найти параметр 'Версия'");
+        taskStatus.shouldBe(Condition.visible);
+        taskVersion.shouldBe(Condition.visible);
         String status = taskStatus.getText();
         String version = taskVersion.getText();
         assertEquals("СДЕЛАТЬ", status, "Ожидался статус: 'СДЕЛАТЬ', но найден: " + status);
@@ -89,44 +83,5 @@ public class ProjectPage {
 
     }
 
-    public void transitionToTodo() {
-        $x("//span[contains(text(), 'Нужно сделать')]").click();
-        Selenide.sleep(1000);
-        getCurrentStatus("СДЕЛАТЬ");
-    }
-
-    public void transitionToInProgress() {
-        $x("//span[contains(text(), 'В работе')]").click();
-        Selenide.sleep(1000);
-        getCurrentStatus("В РАБОТЕ");
-    }
-
-    public void transitionToDone() {
-        $x("//a[@id='opsbar-transitions_more']").click();
-        $x("//span[contains(text(), 'Исполнено')]").click();
-        $x("//input[@id='issue-workflow-transition-submit']").click();
-        Selenide.sleep(1000);
-        getCurrentStatus("РЕШЕННЫЕ");
-    }
-
-    public void transitionToCompleted() {
-        $x("//a[@id='opsbar-transitions_more']").click();
-        $x("//span[contains(text(), 'Выполнено')]").click();
-        Selenide.sleep(1000);
-        getCurrentStatus("ГОТОВО");
-    }
-
-    @Step("Прохождение всех статусов для задачи с заголовком {title}")
-    public void transitionThroughStatuses(String title) {
-        createTask(title);
-        successMessage.shouldBe(Condition.visible, Duration.ofSeconds(10));
-        String issueKey = successMessage.getAttribute("href");
-        assert issueKey != null;
-        open(issueKey);
-        transitionToTodo();
-        transitionToInProgress();
-        transitionToDone();
-        transitionToCompleted();
-    }
 
 }
