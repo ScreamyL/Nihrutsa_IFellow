@@ -1,7 +1,7 @@
 package tests;
 
 
-import config.WebHooks;
+import hooks.Hooks;
 import org.junit.jupiter.api.*;
 import pages.BugPage;
 import pages.LoginPage;
@@ -11,7 +11,7 @@ import static utils.Props.props;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //Очерёдность добавлена больше для 'Красоты' выполнения тестов, без неё всё тоже будет отлично работать.
-public class RunTest extends WebHooks {
+public class RunTest extends Hooks {
 
     private final LoginPage loginPage = new LoginPage();
     private final ProjectPage projectPage = new ProjectPage();

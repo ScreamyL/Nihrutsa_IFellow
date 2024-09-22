@@ -1,10 +1,10 @@
-package config;
+package hooks;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import org.openqa.selenium.PageLoadStrategy;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
@@ -12,10 +12,10 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 /**
  * Класс для настройки браузера перед выполнением тестов.
  */
-public class WebHooks {
+public class Hooks {
 
 
-    @BeforeEach
+    @Before
     public void initBrowser() {
         Selenide.open("https://edujira.ifellow.ru/");
         WebDriverRunner.getWebDriver().manage().window().maximize();
@@ -24,7 +24,7 @@ public class WebHooks {
         Configuration.timeout = 15000;
     }
 
-    @AfterEach
+    @After
     public void tearDown() {
         closeWebDriver();
     }
