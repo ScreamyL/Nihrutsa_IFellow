@@ -7,6 +7,8 @@ import pages.BugPage;
 import pages.LoginPage;
 import pages.ProjectPage;
 
+import static utils.Props.props;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //Очерёдность добавлена больше для 'Красоты' выполнения тестов, без неё всё тоже будет отлично работать.
 public class RunTest extends WebHooks {
@@ -14,17 +16,14 @@ public class RunTest extends WebHooks {
     private final LoginPage loginPage = new LoginPage();
     private final ProjectPage projectPage = new ProjectPage();
     private final BugPage bugPage = new BugPage();
-    @BeforeEach
-    public void setUp() {
-        loginPage.login("AT3", "Qwerty123");
-    }
 
 
     @Test
-    //Тест ради теста именно с помощью ассерта, по сути залогинивание и так проверяется в методе логина путём видимых ожиданий.
+
     @Order(1)
     @DisplayName("Логин тест")
     public void testLogin() {
+        loginPage.login(props.user(), props.password());
         loginPage.isLoggedIn();
     }
 
@@ -32,6 +31,7 @@ public class RunTest extends WebHooks {
     @Order(2)
     @DisplayName("Переход в проект 'Test'")
     public void testProjectsPageOpen() {
+        loginPage.login(props.user(), props.password());
         projectPage.openProjectPage();
     }
 
@@ -41,21 +41,24 @@ public class RunTest extends WebHooks {
     public void testTaskCountIncrease() {
         testProjectsPageOpen();
         int initialCount = projectPage.getTaskCount();
-        projectPage.createTaskAndCount("Тестовая задача", initialCount);
+        projectPage.createTaskAndCount(props.taskkey(), initialCount);
     }
 
     @Test
     @Order(4)
     @DisplayName("Проверка параметров задачи")
     public void testVerifyTaskParams() {
-        projectPage.getTaskDetails("TestSeleniumATHomework");
+        loginPage.login(props.user(), props.password());
+        projectPage.getTaskDetails(props.taskname());
     }
 
     @Test
     @Order(5)
     @DisplayName("Создание бага и проводка по статусам")
     public void createBugAndStatusChanges() {
-        bugPage.transitionThroughStatuses("Тестовая задача");
+        loginPage.login(props.user(), props.password());
+        bugPage.transitionThroughStatuses(props.taskkey());
     }
+
 
 }

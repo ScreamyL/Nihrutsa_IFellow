@@ -7,7 +7,7 @@ import io.qameta.allure.Step;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.$x;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Класс PageObject для страницы "Авторизация"
@@ -40,8 +40,8 @@ public class LoginPage {
 
     @Step("Проверка, вошел ли пользователь в систему")
     public void isLoggedIn() {
-        boolean loggedIn = usernameInput.isDisplayed();
-        assertFalse(loggedIn, "Пользователь не вошел в систему");
+        boolean loggedIn = userProfile.isDisplayed();
+        assertTrue(loggedIn, "Пользователь не вошел в систему");
     }
 
 
