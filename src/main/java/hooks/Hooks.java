@@ -2,10 +2,10 @@ package hooks;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.WebDriverRunner;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import org.openqa.selenium.PageLoadStrategy;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 
@@ -17,11 +17,14 @@ public class Hooks {
 
     @Before
     public void initBrowser() {
-        Selenide.open("https://edujira.ifellow.ru/");
-        WebDriverRunner.getWebDriver().manage().window().maximize();
-        System.out.println((Configuration.pageLoadStrategy));
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--start-maximized");
+        Configuration.browser = "chrome";
+        Configuration.browserCapabilities = options;
+        Configuration.browserSize = null;
         Configuration.pageLoadStrategy = PageLoadStrategy.NORMAL.toString();
         Configuration.timeout = 15000;
+        Selenide.open("https://edujira.ifellow.ru/");
     }
 
     @After
