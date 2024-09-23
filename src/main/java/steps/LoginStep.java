@@ -13,12 +13,12 @@ public class LoginStep {
     private final LoginPage loginPage = new LoginPage();
 
 
-    @Когда("^пользователь выполняет вход в систему")
+    @Когда("^пользователь выполняет вход в систему$")
     public void userLogin() {
         loginPage.login(props.user(), props.password());
     }
 
-    @Тогда("^пользователь успешно авторизован")
+    @Тогда("^пользователь успешно авторизован$")
     public void loginSuccess() {
         loginPage.isLoggedIn();
     }

@@ -38,6 +38,11 @@ public class ProjectPage {
         assertTrue(pageTitle.isDisplayed(), "Не удалось открыть страницу 'Тесты'");
     }
 
+    public boolean isPageTitleVisible() {
+        assertTrue(pageTitle.isDisplayed(), "Не удалось открыть страницу 'Тесты'");
+        return true;
+    }
+
 
     @Step("Получение текущего количества задач")
     public int getTaskCount() {
