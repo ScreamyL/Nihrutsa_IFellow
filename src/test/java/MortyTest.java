@@ -1,9 +1,10 @@
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.given;
 
 public class MortyTest {
 
@@ -12,49 +13,58 @@ public class MortyTest {
     @Test
     @DisplayName("Проверка данных последнего персонажа, появлявшегося с Морти")
     public void testLastCharacterWithMorty() {
-
-        Response charactersResponse = RestAssured.get(BASE_URI + "character");
-        if (charactersResponse.statusCode() != 200) {
-            System.out.println("Ошибка при получении списка персонажей: " + charactersResponse.asString());
-            return;
-        }
+        Response charactersResponse = given()
+                .baseUri(BASE_URI)
+                .when()
+                .get("character")
+                .then()
+                .statusCode(200)
+                .extract().response();
 
         JSONArray charactersJson = new JSONObject(charactersResponse.asString()).getJSONArray("results");
-        JSONObject mortyJson = null;
-
-        for (int i = 0; i < charactersJson.length(); i++) {
-            JSONObject character = charactersJson.getJSONObject(i);
-            if ("Morty Smith".equals(character.getString("name"))) {
-                mortyJson = character;
-                break;
-            }
-        }
+        JSONObject mortyJson = findCharacterJson(charactersJson, "Morty Smith");
 
         if (mortyJson == null) {
             System.out.println("Морти не найден!");
             return;
         }
 
-        JSONArray episodeList = mortyJson.getJSONArray("episode");
-        String lastEpisodeUrl = episodeList.getString(episodeList.length() - 1);
+        String lastEpisodeUrl = getLastEpisodeUrl(mortyJson);
+        Response episodeResponse = given().when().get(lastEpisodeUrl).then()
+                .statusCode(200)
+                .extract().response();
 
-        Response episodeResponse = RestAssured.get(lastEpisodeUrl);
-        if (episodeResponse.statusCode() != 200) {
-            System.out.println("Ошибка при получении данных последнего эпизода: " + episodeResponse.asString());
-            return;
-        }
-        JSONObject episodeJson = new JSONObject(episodeResponse.asString());
-        JSONArray charactersInEpisode = episodeJson.getJSONArray("characters");
+        String lastCharacterUrl = getLastCharacterUrl(new JSONObject(episodeResponse.asString()));
+        Response lastCharacterResponse = given().when().get(lastCharacterUrl).then()
+                .statusCode(200)
+                .extract().response();
 
-        String lastCharacterUrl = charactersInEpisode.getString(charactersInEpisode.length() - 1);
-
-        Response lastCharacterResponse = RestAssured.get(lastCharacterUrl);
-        if (lastCharacterResponse.statusCode() != 200) {
-            System.out.println("Ошибка при получении данных последнего персонажа: " + lastCharacterResponse.asString());
-            return;
-        }
         JSONObject lastCharacterJson = new JSONObject(lastCharacterResponse.asString());
 
+        assertCharacterMatch(mortyJson, lastCharacterJson);
+    }
+
+    private JSONObject findCharacterJson(JSONArray charactersJson, String characterName) {
+        for (int i = 0; i < charactersJson.length(); i++) {
+            JSONObject character = charactersJson.getJSONObject(i);
+            if (characterName.equals(character.getString("name"))) {
+                return character;
+            }
+        }
+        return null;
+    }
+
+    private String getLastEpisodeUrl(JSONObject mortyJson) {
+        JSONArray episodeList = mortyJson.getJSONArray("episode");
+        return episodeList.getString(episodeList.length() - 1);
+    }
+
+    private String getLastCharacterUrl(JSONObject episodeJson) {
+        JSONArray charactersInEpisode = episodeJson.getJSONArray("characters");
+        return charactersInEpisode.getString(charactersInEpisode.length() - 1);
+    }
+
+    private void assertCharacterMatch(JSONObject mortyJson, JSONObject lastCharacterJson) {
         String mortySpecies = mortyJson.getString("species");
         String mortyLocation = mortyJson.getJSONObject("location").getString("name");
 
