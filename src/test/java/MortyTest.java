@@ -5,16 +5,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static utils.Props.props;
 
 public class MortyTest {
 
-    private static final String BASE_URI = "https://rickandmortyapi.com/api/";
 
     @Test
     @DisplayName("Проверка данных последнего персонажа, появлявшегося с Морти")
     public void testLastCharacterWithMorty() {
         Response charactersResponse = given()
-                .baseUri(BASE_URI)
+                .baseUri(props.morty_uri())
                 .when()
                 .get("character")
                 .then()

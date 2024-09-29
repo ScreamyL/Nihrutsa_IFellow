@@ -8,19 +8,18 @@ import java.nio.file.Path;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static utils.Props.props;
 
 
 public class PotatoTest {
 
-    private static final String FILE_PATH = "src/test/resources/potato.json";
-    private static final String BASE_URI = "https://reqres.in/";
 
     @Test
     @DisplayName("Тест переименования картошки")
     public void testPotato() {
         try {
 
-            String jsonContent = new String(Files.readAllBytes(Path.of(FILE_PATH)));
+            String jsonContent = new String(Files.readAllBytes(Path.of(props.file_path())));
             JSONObject body = new JSONObject(jsonContent);
             body.put("name", "Tomato");
             body.put("job", "Eat maket");
@@ -28,7 +27,7 @@ public class PotatoTest {
 
             String response = given()
                     .header("Content-Type", "application/json;charset=UTF-8")
-                    .baseUri(BASE_URI)
+                    .baseUri(props.potato_uri())
                     .body(body.toString())
                     .post("/api/users")
                     .then()
