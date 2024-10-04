@@ -1,47 +1,49 @@
+package steps;
+
+
+import api.MortyApi;
 import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
-import static utils.Props.props;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MortyTest {
+public class MortySteps {
 
+    private final MortyApi api;
 
-    @Test
-    @DisplayName("Проверка данных последнего персонажа, появлявшегося с Морти")
+    public MortySteps(String baseUri) {
+        this.api = new MortyApi(baseUri);
+    }
+
     public void testLastCharacterWithMorty() {
-        Response charactersResponse = given()
-                .baseUri(props.morty_uri())
-                .when()
-                .get("character")
-                .then()
-                .statusCode(200)
-                .extract().response();
-
-        JSONArray charactersJson = new JSONObject(charactersResponse.asString()).getJSONArray("results");
+        JSONArray charactersJson = fetchCharacters();
         JSONObject mortyJson = findCharacterJson(charactersJson, "Morty Smith");
 
         if (mortyJson == null) {
-            System.out.println("Морти не найден!");
-            return;
+            fail("Морти не найден!");
         }
 
         String lastEpisodeUrl = getLastEpisodeUrl(mortyJson);
-        Response episodeResponse = given().when().get(lastEpisodeUrl).then()
-                .statusCode(200)
-                .extract().response();
-
+        Response episodeResponse = getEpisode(lastEpisodeUrl);
         String lastCharacterUrl = getLastCharacterUrl(new JSONObject(episodeResponse.asString()));
-        Response lastCharacterResponse = given().when().get(lastCharacterUrl).then()
-                .statusCode(200)
-                .extract().response();
-
+        Response lastCharacterResponse = getCharacter(lastCharacterUrl);
         JSONObject lastCharacterJson = new JSONObject(lastCharacterResponse.asString());
 
         assertCharacterMatch(mortyJson, lastCharacterJson);
+    }
+
+    private JSONArray fetchCharacters() {
+        Response response = api.getCharacters();
+        return new JSONObject(response.asString()).getJSONArray("results");
+    }
+
+    public Response getEpisode(String url) {
+        return api.getEpisode(url);
+    }
+
+    public Response getCharacter(String url) {
+        return api.getCharacter(url);
     }
 
     private JSONObject findCharacterJson(JSONArray charactersJson, String characterName) {
@@ -71,10 +73,7 @@ public class MortyTest {
         String lastCharacterSpecies = lastCharacterJson.getString("species");
         String lastCharacterLocation = lastCharacterJson.getJSONObject("location").getString("name");
 
-        boolean speciesMatch = mortySpecies.equals(lastCharacterSpecies);
-        boolean locationMatch = mortyLocation.equals(lastCharacterLocation);
-
-        System.out.println("Совпадение расы: " + speciesMatch);
-        System.out.println("Совпадение местоположения: " + locationMatch);
+        assertEquals(mortySpecies, lastCharacterSpecies, "Расы не совпадают!");
+        assertNotEquals(mortyLocation, lastCharacterLocation, "Местоположения совпадают!");
     }
 }
