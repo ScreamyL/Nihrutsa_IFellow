@@ -46,6 +46,7 @@ public class ProjectPage {
 
     }
 
+    @Step("Создание задачи")
     public void createTask(String title) {
         createTaskButton.shouldBe(Condition.visible, Duration.ofSeconds(5)).click();
         issueType.shouldBe(Condition.visible, Duration.ofSeconds(5)).setValue("Ошибка");
@@ -70,7 +71,6 @@ public class ProjectPage {
 
     @Step("Получение деталей задачи с именем {taskName}")
     public String[] getTaskDetails(String taskName) {
-
         searchInput.setValue(taskName).pressEnter();
         taskStatus.shouldBe(Condition.visible);
         taskVersion.shouldBe(Condition.visible);

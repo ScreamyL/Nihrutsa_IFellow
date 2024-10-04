@@ -36,16 +36,19 @@ public class BugPage {
         return true;
     }
 
+    @Step("Прохождение в статус 'СДЕЛАТЬ'")
     public void transitionToTodo() {
         toDoButton.click();
         getCurrentStatus("СДЕЛАТЬ");
     }
 
+    @Step("Прохождение в статус 'В РАБОТЕ'")
     public void transitionToInProgress() {
         inProgressButton.click();
         getCurrentStatus("В РАБОТЕ");
     }
 
+    @Step("Прохождение в статус 'РЕШЕННЫЕ'")
     public void transitionToDone() {
         moreStatButton.click();
         toDoneButton.click();
@@ -53,6 +56,7 @@ public class BugPage {
         getCurrentStatus("РЕШЕННЫЕ");
     }
 
+    @Step("Прохождение в статус 'ГОТОВО'")
     public void transitionToCompleted() {
         moreStatButton.click();
         toCompletedButton.click();

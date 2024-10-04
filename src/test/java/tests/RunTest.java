@@ -19,7 +19,6 @@ public class RunTest extends WebHooks {
 
 
     @Test
-
     @Order(1)
     @DisplayName("Логин тест")
     public void testLogin() {
