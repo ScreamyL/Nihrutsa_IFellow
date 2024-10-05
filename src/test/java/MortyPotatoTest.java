@@ -14,13 +14,13 @@ public class MortyPotatoTest {
 
     @Test
     @DisplayName("Тест переименования картошки")
-    public void mortyTest() {
+    public void potatoTest() {
         potatoSteps.performPotatoTest();
     }
 
     @Test
     @DisplayName("Проверка данных последнего персонажа, появлявшегося с Морти")
-    public void potatoTest() {
+    public void mortyTest() {
         mortySteps.testLastCharacterWithMorty();
     }
 
