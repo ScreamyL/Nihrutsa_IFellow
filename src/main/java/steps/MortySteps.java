@@ -2,34 +2,55 @@ package steps;
 
 
 import api.MortyApi;
+import io.cucumber.java.ru.Если;
+import io.cucumber.java.ru.Когда;
+import io.cucumber.java.ru.Тогда;
 import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static utils.Props.props;
 
 public class MortySteps {
 
     private final MortyApi api;
+    private JSONArray charactersJson;
+    private JSONObject mortyJson;
+    private JSONObject lastCharacterJson;
 
-    public MortySteps(String baseUri) {
+    public MortySteps() {
+        String baseUri = props.morty_uri();
         this.api = new MortyApi(baseUri);
     }
 
-    public void testLastCharacterWithMorty() {
-        JSONArray charactersJson = fetchCharacters();
-        JSONObject mortyJson = findCharacterJson(charactersJson, "Morty Smith");
+    @Когда("я запрашиваю список персонажей")
+    public void IFetchTheCharacterList() {
+        charactersJson = fetchCharacters();
+    }
+
+    @Если("я нахожу Морти")
+    public void IFindMorty() {
+        mortyJson = findCharacterJson(charactersJson, "Morty Smith");
 
         if (mortyJson == null) {
             fail("Морти не найден!");
         }
+    }
 
+    @Когда("я получаю последний эпизод Морти")
+    public void IGetTheLastEpisodeOfMorty() {
         String lastEpisodeUrl = getLastEpisodeUrl(mortyJson);
         Response episodeResponse = getEpisode(lastEpisodeUrl);
         String lastCharacterUrl = getLastCharacterUrl(new JSONObject(episodeResponse.asString()));
         Response lastCharacterResponse = getCharacter(lastCharacterUrl);
-        JSONObject lastCharacterJson = new JSONObject(lastCharacterResponse.asString());
+        lastCharacterJson = new JSONObject(lastCharacterResponse.asString());
+    }
 
+    @Тогда("я проверяю, что последний персонаж не соответствует Морти")
+    public void ICheckThatTheLastCharacterMatchesMorty() {
         assertCharacterMatch(mortyJson, lastCharacterJson);
     }
 
