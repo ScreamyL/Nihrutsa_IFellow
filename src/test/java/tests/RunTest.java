@@ -1,7 +1,7 @@
 package tests;
 
 
-import config.WebHooks;
+import hooks.WebHooks;
 import org.junit.jupiter.api.*;
 import pages.BugPage;
 import pages.LoginPage;

@@ -2,7 +2,10 @@ package pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.SetValueOptions;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
+import io.qameta.allure.model.Parameter;
 
 import java.time.Duration;
 
@@ -22,7 +25,9 @@ public class LoginPage {
 
     public LoginPage setCredentials(String username, String password) {
         usernameInput.setValue(username);
-        passwordInput.setValue(password);
+        Allure.getLifecycle().updateStep(stepResult ->
+                stepResult.getParameters().add(1, new Parameter().setName(stepResult.getParameters().remove(1).getName()).setValue("***")));
+        passwordInput.setValue(SetValueOptions.withText(password).sensitive());
         return this;
     }
 
