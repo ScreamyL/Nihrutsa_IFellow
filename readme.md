@@ -5,10 +5,10 @@
 **Данный проект предназначен для проведения ряда тестов на сайте Edujira. Тесты реализованы с использованием следующих
 инструментов:**
 
-- **JUnit** - для управления тестированием и структурирования тестов.
-- **Maven** - для сборки проекта и управления зависимостями.
-- **Selenide** - для автоматизации браузерного тестирования.
-- **Allure** - для создания отчетов о тестах.
+- <a href="https://junit.org/junit5/" target="_blank"><img style="margin: 10px" src="https://junit.org/junit5/assets/img/junit5-logo.png" alt="JUnit" height="30" /></a> **JUnit** - для управления тестированием и структурирования тестов.
+-  <a href="https://maven.apache.org/" target="_blank"><img style="margin: 10px" src="https://user-images.githubusercontent.com/25181517/117207242-07d5a700-adf4-11eb-975e-be04e62b984b.png" alt="Maven" height="30" /></a>**Maven** - для сборки проекта и управления зависимостями.
+-  <a href="https://selenide.org/" target="_blank"><img style="margin: 10px" src="https://selenide.org/images/selenide-logo-big.png" alt="selenide" height="30" /></a> **Selenide** - для автоматизации браузерного тестирования.
+- <a href="https://allurereport.org/" target="_blank"><img style="margin: 10px" src="https://allurereport.org/svg/logo-report-sign.svg" alt="Allure" height="30" /></a> **Allure** - для создания отчетов о тестах.
 
 ---
 
