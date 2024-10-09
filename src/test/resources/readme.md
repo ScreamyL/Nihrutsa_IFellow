@@ -6,11 +6,11 @@
 
 **Тесты реализованы с использованием следующих инструментов:**
 
-- **JUnit** - для управления тестированием и структурирования тестов.
-- **Maven** - для сборки проекта и управления зависимостями.
-- **Cucumber** - для написания тестов в формате Gherkin, ориентированных на поведение.
-- **Allure** - для создания отчетов о тестах.
-- **RestAssured** - для тестирования API.
+- <a href="https://junit.org/junit5/" target="_blank"><img style="margin: 10px" src="https://junit.org/junit5/assets/img/junit5-logo.png" alt="JUnit" height="30" /></a> **JUnit** - для управления тестированием и структурирования тестов.
+- <a href="https://maven.apache.org/" target="_blank"><img style="margin: 10px" src="https://user-images.githubusercontent.com/25181517/117207242-07d5a700-adf4-11eb-975e-be04e62b984b.png" alt="Maven" height="30" /></a> **Maven** - для сборки проекта и управления зависимостями.
+- <a href="https://cucumber.io/" target="_blank"><img style="margin: 10px" src="https://user-images.githubusercontent.com/25181517/184117353-4b437677-c4bb-4f4c-b448-af4920576732.png" alt="Cucumber" height="30" /></a> **Cucumber** - для написания тестов в формате Gherkin, ориентированных на поведение.
+- <a href="https://allurereport.org/" target="_blank"><img style="margin: 10px" src="https://allurereport.org/svg/logo-report-sign.svg" alt="Allure" height="30" /></a>**Allure** - для создания отчетов о тестах.
+- <a href="https://wikipedia.org/wiki/REST" target="_blank"><img style="margin: 10px" src="https://user-images.githubusercontent.com/25181517/192107858-fe19f043-c502-4009-8c47-476fc89718ad.png" alt="REST" height="30" /></a> **RestAssured** - для тестирования API.
 
 ---
 
