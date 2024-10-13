@@ -45,31 +45,31 @@
    Тест выполняет запрос на получение списка всех персонажей и проверяет, что среди них находится персонаж с именем "Morty Smith". Если Морти отсутствует, тест завершится с ошибкой.
 
 
-    if (mortyJson == null) {
-    fail("Морти не найден!");
-    }
+      if (mortyJson == null) {
+      fail("Морти не найден!");
+      }
 
 
 2. Получение последнего эпизода для Морти:
    Далее тесту необходимо запросить информацию о последнем эпизоде, в котором появляется Морти. Для этого используется URL, извлеченный из информации о Морти.
 
 
-    String lastEpisodeUrl = getLastEpisodeUrl(mortyJson);
+      String lastEpisodeUrl = getLastEpisodeUrl(mortyJson);
 
 
 3. Запрос информации о последнем персонаже:
    После получения данных о последнем эпизоде, тест извлекает URL для последнего персонажа, который появляется в этом эпизоде. Затем выполняется запрос для получения информации об этом персонаже.
 
 
-    String lastCharacterUrl = getLastCharacterUrl(new JSONObject(episodeResponse.asString()));
+      String lastCharacterUrl = getLastCharacterUrl(new JSONObject(episodeResponse.asString()));
 
 
 4. Проверка соответствия данных:
    В финальном шаге теста выполняется проверка, что последний полученный персонаж не совпадает с Морти по местоположению. Проверяется совпадение расы и несоответствие местоположений.
 
 
-    assertEquals(mortySpecies, lastCharacterSpecies, "Расы не совпадают!");
-    assertNotEquals(mortyLocation, lastCharacterLocation, "Местоположения совпадают!");
+      assertEquals(mortySpecies, lastCharacterSpecies, "Расы не совпадают!");
+      assertNotEquals(mortyLocation, lastCharacterLocation, "Местоположения совпадают!");
 
 
 При успешном прохождении теста мы получаем логи запросов и никаких ошибок, что подтверждает правильность работы с API персонажей.
