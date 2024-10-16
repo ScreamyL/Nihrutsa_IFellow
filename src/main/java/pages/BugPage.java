@@ -16,14 +16,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BugPage {
 
 
-    private final SelenideElement taskStatus = $x("//span[@id= 'status-val']").as("Статус задачи");
-    private final SelenideElement successMessage = $x("//div[@class= 'aui-message closeable aui-message-success aui-will-close']/a[@class= 'issue-created-key issue-link']").as("Сообщение об успешно созданной задаче");
-    private final SelenideElement toDoButton = $x("//span[contains(text(), 'Нужно сделать')]").as("Кнопка статуса задачи 'Сделать'");
-    private final SelenideElement inProgressButton = $x("//span[contains(text(), 'В работе')]").as("Кнопка статуса задачи 'В работе'");
-    private final SelenideElement moreStatButton = $x("//a[@id='opsbar-transitions_more']").as("Кнопка выпадающего меню статусов");
-    private final SelenideElement toDoneButton = $x("//span[contains(text(), 'Исполнено')]").as("Кнопка статуса задачи 'Исполнено'");
-    private final SelenideElement submitDoneButton = $x("//input[@id='issue-workflow-transition-submit']").as("Кнопка подтверждения статуса 'Исполнено'");
-    private final SelenideElement toCompletedButton = $x("//span[contains(text(), 'Выполнено')]").as("Кнопка статуса задачи 'Выполнено'");
+    private final SelenideElement taskStatus = $x("//span[@id= 'status-val']")
+            .as("Статус задачи");
+    private final SelenideElement successMessage = $x("//div[@class= 'aui-message closeable" +
+            " aui-message-success aui-will-close']/a[@class= 'issue-created-key issue-link']")
+            .as("Сообщение об успешно созданной задаче");
+    private final SelenideElement toDoButton = $x("//span[contains(text(), 'Нужно сделать')]")
+            .as("Кнопка статуса задачи 'Сделать'");
+    private final SelenideElement inProgressButton = $x("//span[contains(text(), 'В работе')]")
+            .as("Кнопка статуса задачи 'В работе'");
+    private final SelenideElement moreStatButton = $x("//a[@id='opsbar-transitions_more']")
+            .as("Кнопка выпадающего меню статусов");
+    private final SelenideElement toDoneButton = $x("//span[contains(text(), 'Исполнено')]")
+            .as("Кнопка статуса задачи 'Исполнено'");
+    private final SelenideElement submitDoneButton = $x("//input[@id='issue-workflow-transition-submit']")
+            .as("Кнопка подтверждения статуса 'Исполнено'");
+    private final SelenideElement toCompletedButton = $x("//span[contains(text(), 'Выполнено')]")
+            .as("Кнопка статуса задачи 'Выполнено'");
 
 
     private final ProjectPage projectPage = new ProjectPage();

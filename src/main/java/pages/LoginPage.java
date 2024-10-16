@@ -17,16 +17,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class LoginPage {
 
-    private final SelenideElement usernameInput = $x("//input[@id= 'login-form-username']").as("Поле ввода логина");
-    private final SelenideElement passwordInput = $x("//input[@id= 'login-form-password']").as("Поле ввода пароля");
-    private final SelenideElement loginButton = $x("//input[@class= 'aui-button aui-button-primary']").as("Кнопка 'Войти'");
-    private final SelenideElement userProfile = $x("//a[@id= 'header-details-user-fullname']").as("Пользовательский профиль");
+    private final SelenideElement usernameInput = $x("//input[@id= 'login-form-username']")
+            .as("Поле ввода логина");
+    private final SelenideElement passwordInput = $x("//input[@id= 'login-form-password']")
+            .as("Поле ввода пароля");
+    private final SelenideElement loginButton = $x("//input[@class= 'aui-button aui-button-primary']")
+            .as("Кнопка 'Войти'");
+    private final SelenideElement userProfile = $x("//a[@id= 'header-details-user-fullname']")
+            .as("Пользовательский профиль");
 
 
     public LoginPage setCredentials(String username, String password) {
         usernameInput.setValue(username);
         Allure.getLifecycle().updateStep(stepResult ->
-                stepResult.getParameters().add(1, new Parameter().setName(stepResult.getParameters().remove(1).getName()).setValue("***")));
+                stepResult.getParameters().add(1,
+                        new Parameter().setName(stepResult.getParameters().remove(1).getName()).setValue("***")));
         passwordInput.setValue(SetValueOptions.withText(password).sensitive());
         return this;
     }

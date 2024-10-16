@@ -16,20 +16,37 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class ProjectPage {
 
-    private final SelenideElement projectsButton = $x("//a[text()='Проекты']").as("Кнопка 'Проекты'");
-    private final SelenideElement testsButton = $x("//a[text()='Test (TEST)']").as("Кнопка проекта 'Test'");
-    private final SelenideElement pageTitle = $x("//span[@id= 'issues-subnavigation-title']").as("Оглавление страницы");
-    private final SelenideElement taskCount = $x("//div[@class= 'showing']").as("Количество задач");
-    private final SelenideElement createTaskButton = $x("//a[@id= 'create_link']").as("Кнопка создания новой задачи");
-    private final SelenideElement issueType = $x("//input[@id= 'issuetype-field']").as("Поле ввода типа задачи");
-    private final SelenideElement taskStatus = $x("//span[@id= 'status-val']").as("Статус задачи");
-    private final SelenideElement taskVersion = $x("//span[@id='fixfor-val']").as("Версия задачи");
-    private final SelenideElement taskTitleInput = $x("//input[@class= 'text long-field']").as("Поле ввода названия задачи");
-    private final SelenideElement toTextButton = $x("//label[text()='Описание']/following-sibling::div//li[@data-mode='source']/button[text()='Текст']").as("Кнопка переключения в режим 'Текст'");
-    private final SelenideElement description = $x("//label[text()='Описание']/following-sibling::div//textarea[@id='description']").as("Поле ввода описания задачи");
-    private final SelenideElement submitTaskButton = $x("//input[@value= 'Создать']").as("Кнопка подтверждения создания задачи");
-    private final SelenideElement searchInput = $x("//input[@id= 'quickSearchInput']").as("Поле ввода поиска");
-    private final SelenideElement successMessage = $x("//div[@class= 'aui-message closeable aui-message-success aui-will-close']/a[@class= 'issue-created-key issue-link']").as("Сообщение об успешно созданной задаче");
+    private final SelenideElement projectsButton = $x("//a[text()='Проекты']")
+            .as("Кнопка 'Проекты'");
+    private final SelenideElement testsButton = $x("//a[text()='Test (TEST)']")
+            .as("Кнопка проекта 'Test'");
+    private final SelenideElement pageTitle = $x("//span[@id= 'issues-subnavigation-title']")
+            .as("Оглавление страницы");
+    private final SelenideElement taskCount = $x("//div[@class= 'showing']")
+            .as("Количество задач");
+    private final SelenideElement createTaskButton = $x("//a[@id= 'create_link']")
+            .as("Кнопка создания новой задачи");
+    private final SelenideElement issueType = $x("//input[@id= 'issuetype-field']")
+            .as("Поле ввода типа задачи");
+    private final SelenideElement taskStatus = $x("//span[@id= 'status-val']")
+            .as("Статус задачи");
+    private final SelenideElement taskVersion = $x("//span[@id='fixfor-val']")
+            .as("Версия задачи");
+    private final SelenideElement taskTitleInput = $x("//input[@class= 'text long-field']")
+            .as("Поле ввода названия задачи");
+    private final SelenideElement toTextButton = $x("//label[text()='Описание']/following-sibling::" +
+            "div//li[@data-mode='source']/button[text()='Текст']")
+            .as("Кнопка переключения в режим 'Текст'");
+    private final SelenideElement description = $x("//label[text()='Описание']/following-sibling::" +
+            "div//textarea[@id='description']")
+            .as("Поле ввода описания задачи");
+    private final SelenideElement submitTaskButton = $x("//input[@value= 'Создать']")
+            .as("Кнопка подтверждения создания задачи");
+    private final SelenideElement searchInput = $x("//input[@id= 'quickSearchInput']")
+            .as("Поле ввода поиска");
+    private final SelenideElement successMessage = $x("//div[@class= 'aui-message closeable" +
+            " aui-message-success aui-will-close']/a[@class= 'issue-created-key issue-link']")
+            .as("Сообщение об успешно созданной задаче");
 
     @Step("Открытие страницы проекта")
     public void openProjectPage() {

@@ -37,7 +37,8 @@ public class WebHooks {
 
     @BeforeAll
     static void setupAllureReports() {
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
+        SelenideLogger.addListener("AllureSelenide",
+                new AllureSelenide().screenshots(true).savePageSource(true));
 
     }
 
